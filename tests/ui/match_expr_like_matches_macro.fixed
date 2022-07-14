@@ -47,6 +47,7 @@ fn main() {
     }
     {
         // lint
+        #[rustfmt::skip]
         let _ans = matches!(x, E::A(_) | E::B(_));
     }
     {

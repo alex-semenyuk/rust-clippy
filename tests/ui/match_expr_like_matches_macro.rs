@@ -63,6 +63,8 @@ fn main() {
     }
     {
         // lint
+        // skip rustfmt to prevent removing block for first pattern 
+        #[rustfmt::skip]
         let _ans = match x {
             E::A(_) => {
                 true
