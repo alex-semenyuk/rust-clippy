@@ -277,7 +277,7 @@ declare_clippy_lint! {
     ///
     /// ```no_run
     /// # let x = 1;
-    /// x.trailing_zeros() > 4 { }
+    /// if x.trailing_zeros() > 4 { }
     /// ```
     #[clippy::version = "pre 1.29.0"]
     pub VERBOSE_BIT_MASK,
