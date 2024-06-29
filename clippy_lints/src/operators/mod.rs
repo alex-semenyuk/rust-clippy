@@ -276,7 +276,7 @@ declare_clippy_lint! {
     /// Use instead:
     ///
     /// ```no_run
-    /// # let x = 1;
+    /// # let x: i32 = 1;
     /// if x.trailing_zeros() > 4 { }
     /// ```
     #[clippy::version = "pre 1.29.0"]
