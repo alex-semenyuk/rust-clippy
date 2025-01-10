@@ -199,7 +199,7 @@ currently. Between writing new lints, fixing issues, reviewing pull requests and
 responding to issues there may not always be enough time to stay on top of it
 all.
 
-Our highest priority is fixing [ICEs][I-ICE] and [bugs][C-bug], for example
+Our highest priority is fixing [ICEs][`I-ICE`] and [bugs][`C-bug`], for example
 an ICE in a popular crate that many other crates depend on. We don't
 want Clippy to crash on your code and we want it to be as reliable as the
 suggestions from Rust compiler errors.
