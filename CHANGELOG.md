@@ -6,7 +6,182 @@ document.
 
 ## Unreleased / Beta / In Rust Nightly
 
-[64c7431...master](https://github.com/rust-lang/rust-clippy/compare/64c7431...master)
+[49e2f89...master](https://github.com/rust-lang/rust-clippy/compare/49e2f89...master)
+
+## Rust 1.99
+
+Current stable, released 2026-10-01
+
+[View all 123 merged pull requests](https://github.com/rust-lang/rust-clippy/pulls?q=merged%3A2026-06-27T20%3A01%3A42Z..2026-08-07T11%3A58%3A08Z+base%3Amaster)
+
+### New Lints
+
+* Added [`assert_is_empty`] to `pedantic`
+  [#17149](https://github.com/rust-lang/rust-clippy/pull/17149)
+* Added [`nonnull_unchecked_on_box_ptr`] to `complexity`
+  [#17336](https://github.com/rust-lang/rust-clippy/pull/17336)
+* Added [`block_scrutinee`] to `suspicious`
+  [#16855](https://github.com/rust-lang/rust-clippy/pull/16855)
+* Added [`definition_in_module_root`] to `restriction`
+  [#16965](https://github.com/rust-lang/rust-clippy/pull/16965)
+* Added [`rest_pattern_accessible_field`] to `restriction`
+  [#15000](https://github.com/rust-lang/rust-clippy/pull/15000)
+* Added [`unnecessary_rest_pattern`] to `restriction`
+  [#15000](https://github.com/rust-lang/rust-clippy/pull/15000)
+* Added [`manual_bit_width`] to `pedantic`
+  [#16902](https://github.com/rust-lang/rust-clippy/pull/16902)
+* Added [`mismatched_bit_width_type`] to `suspicious`
+  [#16902](https://github.com/rust-lang/rust-clippy/pull/16902)
+
+### Enhancements
+
+* [`redundant_pattern_matching`] parenthesize guarded `matches!` suggestions so the autofix keeps
+  the original operator precedence
+  [#17287](https://github.com/rust-lang/rust-clippy/pull/17287)
+* [`unwrap_or_default`] don't suggest `unwrap_or_default()` for a raw-pointer value below the 1.88
+  MSRV that stabilized `Default` for raw pointers
+  [#17452](https://github.com/rust-lang/rust-clippy/pull/17452)
+* [`clone_on_copy`] lint UFCS calls like `Clone::clone()` and `i32::clone()`
+  [#16972](https://github.com/rust-lang/rust-clippy/pull/16972)
+* [`manual_div_ceil`] avoid suggestions that change the evaluation count of side-effectful divisors
+  [#17468](https://github.com/rust-lang/rust-clippy/pull/17468)
+* [`float_cmp_const`] fix FN on `assert_eq!`
+  [#17024](https://github.com/rust-lang/rust-clippy/pull/17024)
+* [`duration_suboptimal_units`] print the complete method name in the suggestion
+  [#17002](https://github.com/rust-lang/rust-clippy/pull/17002)
+* [`min_ident_chars`] add an option to enforce the lint even when following the naming from the
+  trait
+  [#16741](https://github.com/rust-lang/rust-clippy/pull/16741)
+* [`unnecessary_safety_comment`] handle compound assignments
+  [#17044](https://github.com/rust-lang/rust-clippy/pull/17044)
+* [`big_endian_bytes`], [`host_endian_bytes`], [`little_endian_bytes`] lint method names (including
+  UFCS) rather than only calls
+  [#17363](https://github.com/rust-lang/rust-clippy/pull/17363)
+* [`branches_sharing_code`] also lint `match` expressions whose arms end with the same expression
+  [#17313](https://github.com/rust-lang/rust-clippy/pull/17313)
+* [`approx_constant`] add `EULER_GAMMA` and `GOLDEN_RATIO` constants
+  [#17441](https://github.com/rust-lang/rust-clippy/pull/17441)
+* [`double_must_use`], [`let_underscore_must_use`], [`must_use_candidate`] determine `#[must_use]`
+  needs using the compiler algorithm
+  [#16633](https://github.com/rust-lang/rust-clippy/pull/16633)
+* [`manual_clamp`] detect `== 0` on unsigned types as a clamp lower bound
+  [#16800](https://github.com/rust-lang/rust-clippy/pull/16800)
+* [`single_element_loop`] also trigger if the block contains only a final expression
+  [#16513](https://github.com/rust-lang/rust-clippy/pull/16513)
+* [`implicit_saturating_sub`] respect the configured MSRV in const contexts for the
+  `if x != 0 { x -= 1 }` rewrite
+  [#17404](https://github.com/rust-lang/rust-clippy/pull/17404)
+* [`suboptimal_flops`] fix FN with ambiguous float literals
+  [#16980](https://github.com/rust-lang/rust-clippy/pull/16980)
+* [`too_long_first_doc_paragraph`] count the length of the first paragraph by its text
+  [#17215](https://github.com/rust-lang/rust-clippy/pull/17215)
+* [`arbitrary_source_item_ordering`] add configurable trait impl item ordering modes
+  [#17343](https://github.com/rust-lang/rust-clippy/pull/17343)
+* [`redundant_else`] take into account divergent function calls
+  [#17329](https://github.com/rust-lang/rust-clippy/pull/17329)
+* [`needless_collect`] no longer suggest a fix when `collect`'s turbofish may be the only thing
+  anchoring type inference
+  [#17383](https://github.com/rust-lang/rust-clippy/pull/17383)
+* [`ref_as_ptr`] avoid invalid suggestions in const/static initializers
+  [#17415](https://github.com/rust-lang/rust-clippy/pull/17415)
+* [`unneeded_wildcard_pattern`] partly disable when [`rest_pattern_accessible_field`] is enabled
+  [#17416](https://github.com/rust-lang/rust-clippy/pull/17416)
+* [`manual_filter`] don't silently drop comments in the `and_then` suggestion under `--fix`
+  [#17377](https://github.com/rust-lang/rust-clippy/pull/17377)
+* [`unnecessary_operation`] avoid bad `!` suggestions
+  [#17341](https://github.com/rust-lang/rust-clippy/pull/17341)
+* [`needless_bool`] add parentheses to the suggestion when the if-then-else is used as an operand of
+  a binary or unary operator
+  [#17348](https://github.com/rust-lang/rust-clippy/pull/17348)
+* [`strlen_on_c_strings`] fix incorrect suggestion logic with expressions
+  [#17337](https://github.com/rust-lang/rust-clippy/pull/17337)
+* [`manual_is_variant_and`] respect the MSRV for `map() == Some(_)` comparisons
+  [#17328](https://github.com/rust-lang/rust-clippy/pull/17328)
+* [`suspicious_operation_groupings`] fix lint duplications
+  [#17323](https://github.com/rust-lang/rust-clippy/pull/17323)
+* [`chunks_exact_to_as_chunks`] suggest `iter`/`iter_mut` depending on mutability, and use the
+  correct method name in the message
+  [#17316](https://github.com/rust-lang/rust-clippy/pull/17316)
+  [#17317](https://github.com/rust-lang/rust-clippy/pull/17317)
+* [`chunks_exact_to_as_chunks`] prevent syntactically invalid suggestions, including expressions
+  with type or const parameters
+  [#17318](https://github.com/rust-lang/rust-clippy/pull/17318)
+  [#17319](https://github.com/rust-lang/rust-clippy/pull/17319)
+  [#17360](https://github.com/rust-lang/rust-clippy/pull/17360)
+* [`non_ascii_literal`] and [`invisible_characters`] warn without a suggestion on raw strings instead
+  of suggesting a fix that corrupts them
+  [#17302](https://github.com/rust-lang/rust-clippy/pull/17302)
+* [`ineffective_bit_masks`] lint xor expressions
+  [#15587](https://github.com/rust-lang/rust-clippy/pull/15587)
+* [`filter_map_next`] overhaul suggestions
+  [#17237](https://github.com/rust-lang/rust-clippy/pull/17237)
+* [`single_range_in_vec_init`] support unstable `feature(new_range)` range expressions
+  [#17299](https://github.com/rust-lang/rust-clippy/pull/17299)
+* [`manual_c_str_literals`] don't emit a non-compiling suggestion for a byte string ending in an
+  escaped backslash
+  [#17358](https://github.com/rust-lang/rust-clippy/pull/17358)
+
+### False Positive Fixes
+
+* [`doc_paragraphs_missing_punctuation`] fix FP on images with an embedded link
+  [#16773](https://github.com/rust-lang/rust-clippy/pull/16773)
+* [`no_effect_underscore_binding`] don't lint bindings generated by proc macros
+  [#17473](https://github.com/rust-lang/rust-clippy/pull/17473)
+* [`four_forward_slashes`] no longer fires on `////` comments that sit above an inner doc comment
+  (`//!`) in an item's body
+  [#17448](https://github.com/rust-lang/rust-clippy/pull/17448)
+* [`multiple_unsafe_ops_per_block`] fix FP when taking a pointer to a mutable static without
+  reading, writing, or field-projecting into it
+  [#17461](https://github.com/rust-lang/rust-clippy/pull/17461)
+* [`exit`] do not trigger when the call to `exit()` comes from an external macro
+  [#17105](https://github.com/rust-lang/rust-clippy/pull/17105)
+* [`blocks_in_conditions`] don't lint when removing braces would extend the lifetime of temporaries
+  with significant drops (e.g., `MutexGuard`)
+  [#17420](https://github.com/rust-lang/rust-clippy/pull/17420)
+* [`if_not_else`] do not lint on macro-expanded conditions
+  [#17405](https://github.com/rust-lang/rust-clippy/pull/17405)
+* [`non_zero_suggestions`] fix FP when suggesting `NonZero` for signed integer div/rem
+  [#17385](https://github.com/rust-lang/rust-clippy/pull/17385)
+* [`missing_trait_methods`] do not diagnose unimplemented unstable trait functions unless the
+  unstable feature is enabled
+  [#17309](https://github.com/rust-lang/rust-clippy/pull/17309)
+* [`new_without_default`] be more robust in the presence of attributes on the impl block containing
+  the `new()` implementation
+  [#17366](https://github.com/rust-lang/rust-clippy/pull/17366)
+* [`inline_modules`] don't lint `#[cfg(test)]` inline modules in test builds
+  [#17346](https://github.com/rust-lang/rust-clippy/pull/17346)
+* [`vec_init_then_push`] don't lint when the `push` calls come from a macro expansion
+  [#17289](https://github.com/rust-lang/rust-clippy/pull/17289)
+* [`infinite_loop`] fix FP on `yield` inside gen blocks
+  [#17311](https://github.com/rust-lang/rust-clippy/pull/17311)
+* [`borrow_as_ptr`] avoid linting on automatically derived code
+  [#17257](https://github.com/rust-lang/rust-clippy/pull/17257)
+* [`unnecessary_unwrap_unchecked`] don't trigger inside the `_unchecked` function itself
+  [#17351](https://github.com/rust-lang/rust-clippy/pull/17351)
+
+### ICE Fixes
+
+* [`unnecessary_unwrap_unchecked`] fix ICE when resolving a path to a local variable
+  [#17353](https://github.com/rust-lang/rust-clippy/pull/17353)
+
+### Documentation Improvements
+
+* [`cargo_common_metadata`] update the link in the documentation
+  [#17435](https://github.com/rust-lang/rust-clippy/pull/17435)
+* [`manual_c_str_literals`] add a clarifying note for the `as_ptr` suggestion
+  [#17282](https://github.com/rust-lang/rust-clippy/pull/17282)
+* Fix accessible labels for the theme and version filters on the lint page
+  [#17434](https://github.com/rust-lang/rust-clippy/pull/17434)
+
+### Performance Improvements
+
+* [`nonstandard_macro_braces`] optimize by 99.97%
+  [#16808](https://github.com/rust-lang/rust-clippy/pull/16808)
+
+### Others
+
+* Improved spans on config errors
+  [#13084](https://github.com/rust-lang/rust-clippy/pull/13084)
 
 ## Rust 1.98
 
